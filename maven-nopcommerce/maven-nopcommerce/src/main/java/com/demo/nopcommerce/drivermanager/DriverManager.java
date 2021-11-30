@@ -1,0 +1,38 @@
+package com.demo.nopcommerce.drivermanager;
+
+import com.demo.nopcommerce.propertyreader.PropertyReader;
+import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+
+import java.time.Duration;
+
+public class DriverManager {
+    public String baseUrl = PropertyReader.getInstance().getProperty("baseUrl");
+    public static WebDriver driver;
+
+    public void selectBrowser(String browserName){
+        if(browserName.equalsIgnoreCase("chrome")) {
+            WebDriverManager.chromedriver().setup();
+            driver = new ChromeDriver();
+        }else if (browserName.equalsIgnoreCase("firefox")){
+            WebDriverManager.firefoxdriver().setup();
+            driver = new FirefoxDriver();
+        }else if (browserName.equalsIgnoreCase("ie")){
+            WebDriverManager.iedriver().setup();
+            driver = new InternetExplorerDriver();
+        }else {
+            System.out.println("Wrong browser name");
+        }
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+        driver.get(baseUrl);
+    }
+    public void closeBrowser(){
+        if(driver!=null){
+            driver.quit();
+        }
+    }
+}
